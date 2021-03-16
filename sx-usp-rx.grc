@@ -1,0 +1,571 @@
+options:
+  parameters:
+    author: Mikhail Bychek
+    category: '[GRC Hier Blocks]'
+    cmake_opt: ''
+    comment: ''
+    copyright: SPUTNIX Ltd. sputnix.ru.
+    description: SPUTNIX USP FEC protocol RX
+    gen_cmake: 'On'
+    gen_linking: dynamic
+    generate_options: hb
+    hier_block_src_path: '.:'
+    id: sx_usp_rx
+    max_nouts: '0'
+    output_language: python
+    placement: (0,0)
+    qt_qss_theme: ''
+    realtime_scheduling: ''
+    run: 'True'
+    run_command: '{python} -u {filename}'
+    run_options: prompt
+    sizing_mode: fixed
+    thread_safe_setters: ''
+    title: SX USP rx
+    window_size: ''
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [8, 8]
+    rotation: 0
+    state: enabled
+
+blocks:
+- name: dec_cc
+  id: variable_cc_decoder_def
+  parameters:
+    comment: ''
+    dim1: '4'
+    dim2: '4'
+    framebits: 255 * 8
+    k: '7'
+    mode: fec.CC_TRUNCATED
+    ndim: '0'
+    padding: 'True'
+    polys: '[79, -109]'
+    rate: '2'
+    state_end: '-1'
+    state_start: '0'
+    value: '"ok"'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [464, 12.0]
+    rotation: 0
+    state: enabled
+- name: blocks_keep_m_in_n_1_0_0
+  id: blocks_keep_m_in_n
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    m: mtu - 32 - 2 - 2
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    n: mtu - 32
+    offset: '4'
+    type: byte
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [304, 652.0]
+    rotation: 0
+    state: enabled
+- name: blocks_keep_m_in_n_1_0_0_0
+  id: blocks_keep_m_in_n
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    m: '1'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    n: mtu - 32
+    offset: '2'
+    type: byte
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [304, 572.0]
+    rotation: 0
+    state: enabled
+- name: blocks_keep_m_in_n_1_0_0_0_1
+  id: blocks_keep_m_in_n
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    m: '1'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    n: mtu - 32
+    offset: '3'
+    type: byte
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [304, 492.0]
+    rotation: 0
+    state: enabled
+- name: blocks_message_debug_0
+  id: blocks_message_debug
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1233, 243]
+    rotation: 0
+    state: true
+- name: blocks_null_source_0_1
+  id: blocks_null_source
+  parameters:
+    affinity: ''
+    alias: ''
+    bus_structure_source: '[[0,],]'
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    num_outputs: '1'
+    type: byte
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [472, 736.0]
+    rotation: 0
+    state: enabled
+- name: blocks_null_source_1
+  id: blocks_null_source
+  parameters:
+    affinity: ''
+    alias: ''
+    bus_structure_source: '[[0,],]'
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    num_outputs: '1'
+    type: float
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [544, 256.0]
+    rotation: 0
+    state: enabled
+- name: blocks_pdu_to_tagged_stream_2_0
+  id: blocks_pdu_to_tagged_stream
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    tag: packet_len3
+    type: byte
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [32, 508.0]
+    rotation: 0
+    state: enabled
+- name: blocks_stream_mux_1
+  id: blocks_stream_mux
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    lengths: (1, 1, mtu - 32 - 2 - 2, 255)
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    num_inputs: '4'
+    type: byte
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [656, 496.0]
+    rotation: 0
+    state: true
+- name: blocks_stream_mux_2
+  id: blocks_stream_mux
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    lengths: (64 + mtu * 8 * 2, 255 * 8 * 2)
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    num_inputs: '2'
+    type: float
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [664, 224.0]
+    rotation: 0
+    state: enabled
+- name: blocks_tag_gate_0
+  id: blocks_tag_gate
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    propagate_tags: 'False'
+    single_key: '""'
+    type: byte
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [432, 660.0]
+    rotation: 0
+    state: true
+- name: blocks_tag_gate_0_1
+  id: blocks_tag_gate
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    propagate_tags: 'False'
+    single_key: '""'
+    type: byte
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [432, 580.0]
+    rotation: 0
+    state: true
+- name: blocks_tagged_stream_multiply_length_0
+  id: blocks_tagged_stream_multiply_length
+  parameters:
+    affinity: ''
+    alias: ''
+    c: 1/8.0
+    comment: ''
+    lengthtagname: packet_len
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    type: byte
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [640, 384.0]
+    rotation: 0
+    state: enabled
+- name: blocks_tagged_stream_multiply_length_0_3_1
+  id: blocks_tagged_stream_multiply_length
+  parameters:
+    affinity: ''
+    alias: ''
+    c: (mtu - 32 - 2 + 255) / (mtu - 32)
+    comment: ''
+    lengthtagname: packet_len3
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    type: byte
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [824, 544.0]
+    rotation: 0
+    state: enabled
+- name: blocks_tagged_stream_to_pdu_0
+  id: blocks_tagged_stream_to_pdu
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    tag: packet_len3
+    type: byte
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1096, 556.0]
+    rotation: 0
+    state: true
+- name: blocks_tagged_stream_to_pdu_0_0_0
+  id: blocks_tagged_stream_to_pdu
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    tag: packet_len
+    type: byte
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [912, 396.0]
+    rotation: 0
+    state: enabled
+- name: blocks_unpacked_to_packed_xx_0_0
+  id: blocks_unpacked_to_packed_xx
+  parameters:
+    affinity: ''
+    alias: ''
+    bits_per_chunk: '1'
+    comment: ''
+    endianness: gr.GR_MSB_FIRST
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    num_ports: '1'
+    type: byte
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [464, 372.0]
+    rotation: 0
+    state: enabled
+- name: digital_additive_scrambler_bb_0_0
+  id: digital_additive_scrambler_bb
+  parameters:
+    affinity: ''
+    alias: ''
+    bits_per_byte: '1'
+    comment: ''
+    count: '0'
+    len: '7'
+    mask: '0xA9'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    reset_tag_key: packet_len
+    seed: '0xFF'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [272, 340.0]
+    rotation: 0
+    state: enabled
+- name: digital_correlate_access_code_tag_bb_0_0_0_0
+  id: digital_correlate_access_code_tag_xx
+  parameters:
+    access_code: pls
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    tagname: syncword1
+    threshold: '13'
+    type: float
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [352, 204.0]
+    rotation: 0
+    state: enabled
+- name: fec_extended_tagged_decoder_0
+  id: fec_extended_tagged_decoder
+  parameters:
+    affinity: ''
+    alias: ''
+    ann: None
+    comment: ''
+    decoder_list: dec_cc
+    lentagname: packet_len
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    mtu: mtu
+    puncpat: '''11'''
+    value: fec_extended_decoder
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [32, 348.0]
+    rotation: 0
+    state: enabled
+- name: mtu
+  id: parameter
+  parameters:
+    alias: ''
+    comment: ''
+    hide: none
+    label: MTU
+    short_id: ''
+    type: intx
+    value: '255'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [376, 12.0]
+    rotation: 0
+    state: true
+- name: pad_sink_1
+  id: pad_sink
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    label: out_msg
+    num_streams: '1'
+    optional: 'True'
+    type: message
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1312, 556.0]
+    rotation: 0
+    state: true
+- name: pad_source_0
+  id: pad_source
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    label: in
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    num_streams: '1'
+    optional: 'False'
+    type: float
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [8, 220.0]
+    rotation: 0
+    state: true
+- name: pls
+  id: parameter
+  parameters:
+    alias: ''
+    comment: ''
+    hide: none
+    label: PLS code
+    short_id: ''
+    type: str
+    value: '"0010010011001000110101101001110000000110000101110111100010101111"'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [192, 12.0]
+    rotation: 0
+    state: true
+- name: satellites_decode_rs_ccsds_0
+  id: satellites_decode_rs_ccsds
+  parameters:
+    affinity: ''
+    alias: ''
+    basis: 'True'
+    comment: ''
+    interleave: '1'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1160, 388.0]
+    rotation: 0
+    state: true
+- name: satellites_fixedlen_tagger_0_0_0_1
+  id: satellites_fixedlen_tagger
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    packet_len: 64 + mtu * 8 * 2
+    packetlen_tag: packet_len0
+    stream_type: float
+    syncword_tag: syncword
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [128, 204.0]
+    rotation: 0
+    state: enabled
+- name: satellites_fixedlen_tagger_0_0_0_1_0
+  id: satellites_fixedlen_tagger
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    packet_len: mtu * 8 * 2
+    packetlen_tag: packet_len
+    stream_type: float
+    syncword_tag: syncword1
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [832, 220.0]
+    rotation: 0
+    state: enabled
+
+connections:
+- [blocks_keep_m_in_n_1_0_0, '0', blocks_tag_gate_0, '0']
+- [blocks_keep_m_in_n_1_0_0_0, '0', blocks_tag_gate_0_1, '0']
+- [blocks_keep_m_in_n_1_0_0_0_1, '0', blocks_stream_mux_1, '0']
+- [blocks_null_source_0_1, '0', blocks_stream_mux_1, '3']
+- [blocks_null_source_1, '0', blocks_stream_mux_2, '1']
+- [blocks_pdu_to_tagged_stream_2_0, '0', blocks_keep_m_in_n_1_0_0, '0']
+- [blocks_pdu_to_tagged_stream_2_0, '0', blocks_keep_m_in_n_1_0_0_0, '0']
+- [blocks_pdu_to_tagged_stream_2_0, '0', blocks_keep_m_in_n_1_0_0_0_1, '0']
+- [blocks_stream_mux_1, '0', blocks_tagged_stream_multiply_length_0_3_1, '0']
+- [blocks_stream_mux_2, '0', satellites_fixedlen_tagger_0_0_0_1_0, '0']
+- [blocks_tag_gate_0, '0', blocks_stream_mux_1, '2']
+- [blocks_tag_gate_0_1, '0', blocks_stream_mux_1, '1']
+- [blocks_tagged_stream_multiply_length_0, '0', blocks_tagged_stream_to_pdu_0_0_0,
+  '0']
+- [blocks_tagged_stream_multiply_length_0_3_1, '0', blocks_tagged_stream_to_pdu_0,
+  '0']
+- [blocks_tagged_stream_to_pdu_0, pdus, pad_sink_1, in]
+- [blocks_tagged_stream_to_pdu_0_0_0, pdus, blocks_message_debug_0, print_pdu]
+- [blocks_tagged_stream_to_pdu_0_0_0, pdus, satellites_decode_rs_ccsds_0, in]
+- [blocks_unpacked_to_packed_xx_0_0, '0', blocks_tagged_stream_multiply_length_0,
+  '0']
+- [digital_additive_scrambler_bb_0_0, '0', blocks_unpacked_to_packed_xx_0_0, '0']
+- [digital_correlate_access_code_tag_bb_0_0_0_0, '0', blocks_stream_mux_2, '0']
+- [fec_extended_tagged_decoder_0, '0', digital_additive_scrambler_bb_0_0, '0']
+- [pad_source_0, '0', satellites_fixedlen_tagger_0_0_0_1, '0']
+- [satellites_decode_rs_ccsds_0, out, blocks_pdu_to_tagged_stream_2_0, pdus]
+- [satellites_fixedlen_tagger_0_0_0_1, '0', digital_correlate_access_code_tag_bb_0_0_0_0,
+  '0']
+- [satellites_fixedlen_tagger_0_0_0_1_0, '0', fec_extended_tagged_decoder_0, '0']
+
+metadata:
+  file_format: 1
