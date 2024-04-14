@@ -1,6 +1,7 @@
 options:
   parameters:
     author: Mikhail Bychek
+    catch_exceptions: 'True'
     category: Custom
     cmake_opt: ''
     comment: ''
@@ -36,6 +37,7 @@ blocks:
   id: variable_qtgui_entry
   parameters:
     comment: ''
+    entry_signal: editingFinished
     gui_hint: :0,4
     label: 'BPS(need restart):'
     type: int
@@ -51,6 +53,7 @@ blocks:
   id: variable_qtgui_entry
   parameters:
     comment: ''
+    entry_signal: editingFinished
     gui_hint: :0,0
     label: Carrier
     type: int
@@ -227,7 +230,7 @@ blocks:
     gui_hint: :0,1
     label: Frequency correction(ppm)
     min_len: '200'
-    orient: Qt.Horizontal
+    orient: QtCore.Qt.Horizontal
     rangeType: float
     start: '-10'
     step: '0.1'
@@ -260,7 +263,7 @@ blocks:
     gui_hint: :0,2
     label: RX gain
     min_len: '100'
-    orient: Qt.Horizontal
+    orient: QtCore.Qt.Horizontal
     rangeType: int
     start: '0'
     step: '1'
@@ -286,6 +289,18 @@ blocks:
     coordinate: [384, 4.0]
     rotation: 0
     state: enabled
+- name: sample_rate_bb
+  id: variable
+  parameters:
+    comment: ''
+    value: '480000'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [360, 184.0]
+    rotation: 0
+    state: disabled
 - name: sample_rate_rf
   id: variable
   parameters:
@@ -412,6 +427,22 @@ blocks:
     coordinate: [624, 416.0]
     rotation: 0
     state: enabled
+- name: blocks_float_to_complex_1
+  id: blocks_float_to_complex
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [272, 632.0]
+    rotation: 0
+    state: disabled
 - name: blocks_keep_m_in_n_0
   id: blocks_keep_m_in_n
   parameters:
@@ -487,43 +518,6 @@ blocks:
     coordinate: [224, 996.0]
     rotation: 0
     state: true
-- name: blocks_pdu_to_tagged_stream_2
-  id: blocks_pdu_to_tagged_stream
-  parameters:
-    affinity: ''
-    alias: ''
-    comment: ''
-    maxoutbuf: '0'
-    minoutbuf: '0'
-    tag: packet_len3
-    type: byte
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [8, 1004.0]
-    rotation: 0
-    state: enabled
-- name: blocks_socket_pdu_0_0
-  id: blocks_socket_pdu
-  parameters:
-    affinity: ''
-    alias: ''
-    comment: ''
-    host: ''
-    maxoutbuf: '0'
-    minoutbuf: '0'
-    mtu: '10000'
-    port: '8001'
-    tcp_no_delay: 'True'
-    type: TCP_SERVER
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [40, 1180.0]
-    rotation: 0
-    state: enabled
 - name: blocks_stream_mux_0
   id: blocks_stream_mux
   parameters:
@@ -581,23 +575,27 @@ blocks:
     coordinate: [400, 1008.0]
     rotation: 0
     state: enabled
-- name: blocks_tagged_stream_to_pdu_0_0_0_1
-  id: blocks_tagged_stream_to_pdu
+- name: blocks_throttle2_0
+  id: blocks_throttle2
   parameters:
     affinity: ''
     alias: ''
     comment: ''
+    ignoretag: 'True'
+    limit: auto
+    maximum: '0.1'
     maxoutbuf: '0'
     minoutbuf: '0'
-    tag: packet_len4
-    type: byte
+    samples_per_second: sample_rate_rf
+    type: complex
+    vlen: '1'
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1360, 1036.0]
+    coordinate: [448, 632.0]
     rotation: 0
-    state: enabled
+    state: disabled
 - name: blocks_unpacked_to_packed_xx_1
   id: blocks_unpacked_to_packed_xx
   parameters:
@@ -617,6 +615,24 @@ blocks:
     coordinate: [912, 1012.0]
     rotation: 0
     state: true
+- name: blocks_wavfile_source_0
+  id: blocks_wavfile_source
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    file: Orbicraft-Zorkiy_SignalSample.wav
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    nchan: '2'
+    repeat: 'True'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [208, 552.0]
+    rotation: 0
+    state: disabled
 - name: dc_blocker_xx_0
   id: dc_blocker_xx
   parameters:
@@ -653,7 +669,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1304, 780.0]
+    coordinate: [1304, 784.0]
     rotation: 0
     state: enabled
 - name: digital_correlate_access_code_tag_bb_0_0_0
@@ -749,7 +765,7 @@ blocks:
     bus_structure: null
     coordinate: [368, 132.0]
     rotation: 0
-    state: true
+    state: disabled
 - name: gpredict_doppler_0
   id: gpredict_doppler
   parameters:
@@ -767,7 +783,7 @@ blocks:
     bus_structure: null
     coordinate: [176, 132.0]
     rotation: 0
-    state: enabled
+    state: disabled
 - name: import_0
   id: import
   parameters:
@@ -837,12 +853,32 @@ blocks:
     samp_rate: sample_rate_bb / decimation_demod
     type: fir_filter_fff
     width: bps / 4
-    win: firdes.WIN_HAMMING
+    win: window.WIN_HAMMING
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
     coordinate: [1128, 764.0]
+    rotation: 0
+    state: enabled
+- name: network_socket_pdu_0
+  id: network_socket_pdu
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    host: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    mtu: '10000'
+    port: '8001'
+    tcp_no_delay: 'False'
+    type: TCP_SERVER
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [224, 1192.0]
     rotation: 0
     state: enabled
 - name: osmosdr_source_0_0
@@ -1201,7 +1237,7 @@ blocks:
     bus_structure: null
     coordinate: [0, 708.0]
     rotation: 0
-    state: disabled
+    state: enabled
 - name: osmosdr_source_0_0_0
   id: osmosdr_source
   parameters:
@@ -1558,6 +1594,40 @@ blocks:
     bus_structure: null
     coordinate: [0, 476.0]
     rotation: 0
+    state: disabled
+- name: pdu_pdu_to_tagged_stream_0
+  id: pdu_pdu_to_tagged_stream
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    tag: packet_len3
+    type: byte
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [72, 944.0]
+    rotation: 0
+    state: enabled
+- name: pdu_tagged_stream_to_pdu_0
+  id: pdu_tagged_stream_to_pdu
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    tag: packet_len4
+    type: byte
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1328, 1000.0]
+    rotation: 0
     state: enabled
 - name: qtgui_sink_x_0
   id: qtgui_sink_x
@@ -1580,7 +1650,7 @@ blocks:
     showports: 'True'
     showrf: 'False'
     type: complex
-    wintype: firdes.WIN_BLACKMAN_hARRIS
+    wintype: window.WIN_BLACKMAN_hARRIS
   states:
     bus_sink: false
     bus_source: false
@@ -1609,7 +1679,7 @@ blocks:
     showports: 'True'
     showrf: 'False'
     type: complex
-    wintype: firdes.WIN_BLACKMAN_hARRIS
+    wintype: window.WIN_BLACKMAN_hARRIS
   states:
     bus_sink: false
     bus_source: false
@@ -1876,21 +1946,23 @@ connections:
 - [analog_quadrature_demod_cf_0_0, '0', dc_blocker_xx_0, '0']
 - [blocks_float_to_complex_0, '0', blocks_stream_mux_0, '3']
 - [blocks_float_to_complex_0_0, '0', blocks_stream_mux_0, '2']
+- [blocks_float_to_complex_1, '0', blocks_throttle2_0, '0']
 - [blocks_keep_m_in_n_0, '0', qtgui_sink_x_0, '0']
 - [blocks_keep_m_in_n_0, '0', qtgui_sink_x_0_0, '0']
 - [blocks_keep_one_in_n_0, '0', analog_quadrature_demod_cf_0_0, '0']
 - [blocks_null_source_0, '0', blocks_stream_mux_0, '3']
 - [blocks_packed_to_unpacked_xx_1, '0', blocks_tagged_stream_multiply_length_0_3_0,
   '0']
-- [blocks_pdu_to_tagged_stream_2, '0', blocks_packed_to_unpacked_xx_1, '0']
 - [blocks_stream_mux_0, '0', blocks_keep_m_in_n_0, '0']
-- [blocks_tagged_stream_multiply_length_0_1, '0', blocks_tagged_stream_to_pdu_0_0_0_1,
-  '0']
+- [blocks_tagged_stream_multiply_length_0_1, '0', pdu_tagged_stream_to_pdu_0, '0']
 - [blocks_tagged_stream_multiply_length_0_3_0, '0', satellites_varlen_packet_tagger_0,
   '0']
-- [blocks_tagged_stream_to_pdu_0_0_0_1, pdus, satellites_pdu_to_kiss_0, in]
+- [blocks_throttle2_0, '0', blocks_stream_mux_0, '0']
+- [blocks_throttle2_0, '0', fir_filter_xxx_0, '0']
 - [blocks_unpacked_to_packed_xx_1, '0', blocks_tagged_stream_multiply_length_0_1,
   '0']
+- [blocks_wavfile_source_0, '0', blocks_float_to_complex_1, '0']
+- [blocks_wavfile_source_0, '1', blocks_float_to_complex_1, '1']
 - [dc_blocker_xx_0, '0', low_pass_filter_0, '0']
 - [digital_clock_recovery_mm_xx_0, '0', digital_correlate_access_code_tag_bb_0_0_0,
   '0']
@@ -1909,6 +1981,8 @@ connections:
 - [low_pass_filter_0, '0', interp_fir_filter_xxx_0_0, '0']
 - [osmosdr_source_0_0, '0', freq_xlating_fir_filter__2ch_rtlsdr_0_0, '0']
 - [osmosdr_source_0_0_0, '0', freq_xlating_fir_filter__2ch_rtlsdr_0_0, '0']
+- [pdu_pdu_to_tagged_stream_0, '0', blocks_packed_to_unpacked_xx_1, '0']
+- [pdu_tagged_stream_to_pdu_0, pdus, satellites_pdu_to_kiss_0, in]
 - [satellites_check_address_0, ok, satellites_submit_0, in]
 - [satellites_check_address_0, ok, satellites_submit_0_1, in]
 - [satellites_check_address_0_0, ok, satellites_submit_0_0, in]
@@ -1919,10 +1993,11 @@ connections:
 - [satellites_pdu_to_kiss_0, out, satellites_check_address_0_0, in]
 - [satellites_pdu_to_kiss_0, out, satellites_check_address_0_0_0, in]
 - [satellites_pdu_to_kiss_0, out, satellites_print_timestamp_0, in]
-- [satellites_print_timestamp_0, out, blocks_socket_pdu_0_0, pdus]
+- [satellites_print_timestamp_0, out, network_socket_pdu_0, pdus]
 - [satellites_varlen_packet_tagger_0, '0', blocks_unpacked_to_packed_xx_1, '0']
-- [sx_usp_rx_0, out_msg, blocks_pdu_to_tagged_stream_2, pdus]
-- [sx_usp_rx_0_0, out_msg, blocks_pdu_to_tagged_stream_2, pdus]
+- [sx_usp_rx_0, out_msg, pdu_pdu_to_tagged_stream_0, pdus]
+- [sx_usp_rx_0_0, out_msg, pdu_pdu_to_tagged_stream_0, pdus]
 
 metadata:
   file_format: 1
+  grc_version: 3.10.9.2

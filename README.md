@@ -48,3 +48,9 @@ encapsulate AX.25 the value 0x08FF used, like BPQ. The length field is 2-byte
 little-endian, exact payload length, including AX.25 header. No bit-stuffing, no
 HDLC, no CRC besides RS.
 
+Requirements
+-----------
+
+1. gnuradio 3.10 (check branches for other versions)
+2. gnuradio-osmosdr
+3. gr-satellites

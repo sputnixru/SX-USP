@@ -1,6 +1,7 @@
 options:
   parameters:
     author: Mikhail Bychek
+    catch_exceptions: 'True'
     category: '[GRC Hier Blocks]'
     cmake_opt: ''
     comment: ''
@@ -118,6 +119,8 @@ blocks:
     affinity: ''
     alias: ''
     comment: ''
+    en_uvec: 'True'
+    log_level: info
   states:
     bus_sink: false
     bus_source: false
@@ -161,23 +164,6 @@ blocks:
     bus_source: false
     bus_structure: null
     coordinate: [544, 256.0]
-    rotation: 0
-    state: enabled
-- name: blocks_pdu_to_tagged_stream_2_0
-  id: blocks_pdu_to_tagged_stream
-  parameters:
-    affinity: ''
-    alias: ''
-    comment: ''
-    maxoutbuf: '0'
-    minoutbuf: '0'
-    tag: packet_len3
-    type: byte
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [32, 508.0]
     rotation: 0
     state: enabled
 - name: blocks_stream_mux_1
@@ -292,40 +278,6 @@ blocks:
     bus_source: false
     bus_structure: null
     coordinate: [824, 544.0]
-    rotation: 0
-    state: enabled
-- name: blocks_tagged_stream_to_pdu_0
-  id: blocks_tagged_stream_to_pdu
-  parameters:
-    affinity: ''
-    alias: ''
-    comment: ''
-    maxoutbuf: '0'
-    minoutbuf: '0'
-    tag: packet_len3
-    type: byte
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [1096, 556.0]
-    rotation: 0
-    state: true
-- name: blocks_tagged_stream_to_pdu_0_0_0
-  id: blocks_tagged_stream_to_pdu
-  parameters:
-    affinity: ''
-    alias: ''
-    comment: ''
-    maxoutbuf: '0'
-    minoutbuf: '0'
-    tag: packet_len
-    type: byte
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [912, 396.0]
     rotation: 0
     state: enabled
 - name: blocks_unpacked_to_packed_xx_0_0
@@ -463,6 +415,57 @@ blocks:
     coordinate: [8, 220.0]
     rotation: 0
     state: true
+- name: pdu_pdu_to_tagged_stream_0
+  id: pdu_pdu_to_tagged_stream
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    tag: packet_len
+    type: byte
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [64, 504.0]
+    rotation: 0
+    state: enabled
+- name: pdu_tagged_stream_to_pdu_0
+  id: pdu_tagged_stream_to_pdu
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    tag: packet_len
+    type: byte
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [920, 368.0]
+    rotation: 0
+    state: enabled
+- name: pdu_tagged_stream_to_pdu_0_0
+  id: pdu_tagged_stream_to_pdu
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    tag: packet_len3
+    type: byte
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1088, 552.0]
+    rotation: 0
+    state: enabled
 - name: pls
   id: parameter
   parameters:
@@ -542,30 +545,30 @@ connections:
 - [blocks_keep_m_in_n_1_0_0_0_1, '0', blocks_stream_mux_1, '0']
 - [blocks_null_source_0_1, '0', blocks_stream_mux_1, '3']
 - [blocks_null_source_1, '0', blocks_stream_mux_2, '1']
-- [blocks_pdu_to_tagged_stream_2_0, '0', blocks_keep_m_in_n_1_0_0, '0']
-- [blocks_pdu_to_tagged_stream_2_0, '0', blocks_keep_m_in_n_1_0_0_0, '0']
-- [blocks_pdu_to_tagged_stream_2_0, '0', blocks_keep_m_in_n_1_0_0_0_1, '0']
 - [blocks_stream_mux_1, '0', blocks_tagged_stream_multiply_length_0_3_1, '0']
 - [blocks_stream_mux_2, '0', satellites_fixedlen_tagger_0_0_0_1_0, '0']
 - [blocks_tag_gate_0, '0', blocks_stream_mux_1, '2']
 - [blocks_tag_gate_0_1, '0', blocks_stream_mux_1, '1']
-- [blocks_tagged_stream_multiply_length_0, '0', blocks_tagged_stream_to_pdu_0_0_0,
+- [blocks_tagged_stream_multiply_length_0, '0', pdu_tagged_stream_to_pdu_0, '0']
+- [blocks_tagged_stream_multiply_length_0_3_1, '0', pdu_tagged_stream_to_pdu_0_0,
   '0']
-- [blocks_tagged_stream_multiply_length_0_3_1, '0', blocks_tagged_stream_to_pdu_0,
-  '0']
-- [blocks_tagged_stream_to_pdu_0, pdus, pad_sink_1, in]
-- [blocks_tagged_stream_to_pdu_0_0_0, pdus, blocks_message_debug_0, print_pdu]
-- [blocks_tagged_stream_to_pdu_0_0_0, pdus, satellites_decode_rs_ccsds_0, in]
 - [blocks_unpacked_to_packed_xx_0_0, '0', blocks_tagged_stream_multiply_length_0,
   '0']
 - [digital_additive_scrambler_bb_0_0, '0', blocks_unpacked_to_packed_xx_0_0, '0']
 - [digital_correlate_access_code_tag_bb_0_0_0_0, '0', blocks_stream_mux_2, '0']
 - [fec_extended_tagged_decoder_0, '0', digital_additive_scrambler_bb_0_0, '0']
 - [pad_source_0, '0', satellites_fixedlen_tagger_0_0_0_1, '0']
-- [satellites_decode_rs_ccsds_0, out, blocks_pdu_to_tagged_stream_2_0, pdus]
+- [pdu_pdu_to_tagged_stream_0, '0', blocks_keep_m_in_n_1_0_0, '0']
+- [pdu_pdu_to_tagged_stream_0, '0', blocks_keep_m_in_n_1_0_0_0, '0']
+- [pdu_pdu_to_tagged_stream_0, '0', blocks_keep_m_in_n_1_0_0_0_1, '0']
+- [pdu_tagged_stream_to_pdu_0, pdus, blocks_message_debug_0, print_pdu]
+- [pdu_tagged_stream_to_pdu_0, pdus, satellites_decode_rs_ccsds_0, in]
+- [pdu_tagged_stream_to_pdu_0_0, pdus, pad_sink_1, in]
+- [satellites_decode_rs_ccsds_0, out, pdu_pdu_to_tagged_stream_0, pdus]
 - [satellites_fixedlen_tagger_0_0_0_1, '0', digital_correlate_access_code_tag_bb_0_0_0_0,
   '0']
 - [satellites_fixedlen_tagger_0_0_0_1_0, '0', fec_extended_tagged_decoder_0, '0']
 
 metadata:
   file_format: 1
+  grc_version: 3.10.9.2
